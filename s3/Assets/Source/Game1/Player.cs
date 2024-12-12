@@ -1,36 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    private Vector3 direction;
 
-    public float force = 100; // 玩家跳?力度
+    public float gravity = -9.8f;
 
-    // Start is called before the first frame update
-    void Start()
+    public float strength = 5f;
+
+    private void OnEnable()
     {
-        // 在游??始??行的代?可以放在?里
+        Vector3 position = transform.position;
+        position.y = 0f;
+        transform.position = position;
+        direction = Vector3.zero;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        // 在?一?更新???玩家的?入
         if (Input.GetMouseButtonDown(0))
         {
-            // 当玩家点?鼠?左??，将玩家的?体速度重置?零，然后施加向上的力以??跳?效果
-            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            GetComponent<Rigidbody2D>().AddForce(new Vector2(0, force));
+            direction = Vector3.up * strength;
+        }
+
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if(touch.phase == TouchPhase.Began)
+            {
+                direction = Vector3.up * strength;
+            }
+        }
+
+        direction.y += gravity * Time.deltaTime;
+        transform.position += direction * Time.deltaTime;
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Obstacle")
+        {
+            FindObjectOfType<GameManager>().GameOver();
+        }else if (other.gameObject.tag == "Score")
+        {
+            FindObjectOfType<GameManager>().IncreaseScore();
         }
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        // 当玩家与其他?撞体?生?撞?，重新加?游??景
-        SceneManager.LoadScene(0);
-    }
-
 }
