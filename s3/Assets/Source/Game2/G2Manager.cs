@@ -4,19 +4,31 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement; // 导入场景管理命名空间
 
-public class GameManager : MonoBehaviour
+public class G2Manager : MonoBehaviour
 {
-    public Player player; // 玩家对象，控制玩家行为
+    public GameObject block; // 方块游戏对象，用于生成障碍
+
+    public GameObject Score;
+
+    public float maxX; // 障碍物生成的最大水平偏移量
+
+    public Transform spawnPoint; // 障碍物生成位置的初始点
+
+    public float spawnRate; // 障碍物生成的间隔时间
 
     public Text scoreText; // 显示分数的UI文本
+
+    private int score; // 当前分数
 
     public GameObject playButton; // 开始游戏按钮
 
     public GameObject backButton; // 返回主菜单按钮
 
+    private bool gameStarted = false; // 游戏是否开始的标志
+
     public GameObject gameOver; // 游戏结束的UI对象
 
-    private int score; // 当前分数
+    public G2Player player; // 玩家对象，控制玩家行为
 
     private void Awake()
     {
@@ -38,13 +50,26 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1f; // 恢复游戏时间
         player.enabled = true; // 启用玩家控制
+    }
 
-        Pipes[] pipes = FindObjectsOfType<Pipes>(); // 查找场景中的所有管道对象
+    private void StartSpawning()
+    {
+        InvokeRepeating("SpawnBlock", 0.5f, spawnRate); // 定时生成障碍物
+    }
 
-        for (int i = 0; i < pipes.Length; i++)
-        {
-            Destroy(pipes[i].gameObject); // 销毁所有管道对象
-        }
+    private void SpawnBlock()
+    {
+        Vector3 spawnPos = spawnPoint.position; // 获取生成位置
+
+        spawnPos.x = Random.Range(-maxX, maxX); // 随机水平偏移
+
+        Instantiate(block, spawnPos, Quaternion.identity); // 实例化障碍物
+    }
+
+    public void IncreaseScore()
+    {
+        score++; // 增加分数
+        scoreText.text = score.ToString(); // 更新分数显示
     }
 
     public void Pause()
@@ -62,13 +87,6 @@ public class GameManager : MonoBehaviour
         Pause(); // 暂停游戏
     }
 
-    public void IncreaseScore()
-    {
-        score++; // 增加分数
-        scoreText.text = score.ToString(); // 更新分数显示
-    }
-
-    // 返回到Title场景
     public void BackToTitle()
     {
         SceneManager.LoadScene("Title"); // 加载主菜单场景

@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Obstacle
   - Score
+  - Block
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Enemy
   - Water
   - UI
   - 

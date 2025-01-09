@@ -8,9 +8,9 @@ public class Spawner : MonoBehaviour
 
     public float spawnRate = 1.0f;
 
-    public float minHeight = -1.0f;
+    public float minHeight = -5.0f;
 
-    public float maxHeight = 1.0f;
+    public float maxHeight = 5.0f;
 
     private void OnEnable()
     {
