@@ -12,7 +12,9 @@ public class G3Manager : MonoBehaviour
     public GameObject poison; // 毒物
     public GameObject food;   // 食物
 
-    public float spawnRate; // 物体生成的间隔时间
+    public float spawnRate = 2.0f; // 初始生成间隔
+    public float spawnRateDecrease = 0.1f; // 每次减少的间隔时间
+    public float minSpawnRate = 0.5f; // 最小生成间隔
 
     public Text scoreText; // 显示分数的UI文本
 
@@ -50,7 +52,7 @@ public class G3Manager : MonoBehaviour
         backButton.SetActive(false); // 隐藏返回按钮
         gameOver.SetActive(false); // 隐藏游戏结束UI
 
-        // 新增：销毁所有食物和毒物
+        // 销毁所有食物和毒物
         DestroyAllObjectsWithTag("food");
         DestroyAllObjectsWithTag("poison");
 
@@ -80,7 +82,24 @@ public class G3Manager : MonoBehaviour
     /// </summary>
     private void StartSpawning()
     {
-        InvokeRepeating("SpawnObject", 0.5f, spawnRate); // 定时生成物体
+        StartCoroutine(SpawnRoutine());
+    }
+
+    /// <summary>
+    /// 生成物体的协程，生成间隔逐渐减少
+    /// </summary>
+    private IEnumerator SpawnRoutine()
+    {
+        while (true)
+        {
+            SpawnObject(); // 生成物体
+
+            // 等待当前生成间隔
+            yield return new WaitForSeconds(spawnRate);
+
+            // 减少生成间隔，直到达到最小值
+            spawnRate = Mathf.Max(spawnRate - spawnRateDecrease, minSpawnRate);
+        }
     }
 
     /// <summary>

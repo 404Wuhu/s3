@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7d3e15b88d250ad4691bb7dce9144ac9
+guid: a36ba3295b4f7674480bcf492ab1c325
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -117,13 +117,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FLYING_0
+      name: Walk_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 6
-        width: 78
-        height: 59
+        x: 0
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,20 +131,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 69a4bde56ccbf5644bd136f94e4bf9c9
-      internalID: 1752469432
+      spriteID: 342d3a0cc865b474485c27979c597b0c
+      internalID: 1686762278
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FLYING_1
+      name: Walk_1
       rect:
         serializedVersion: 2
-        x: 89
-        y: 2
-        width: 64
-        height: 66
+        x: 48
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -152,20 +152,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bdd752bad4774c14ea336b4d6f5fd1d7
-      internalID: 786629826
+      spriteID: 807c7a8d14d951d4390ee7267a2540ce
+      internalID: 332035305
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FLYING_2
+      name: Walk_2
       rect:
         serializedVersion: 2
-        x: 169
-        y: 6
-        width: 68
-        height: 61
+        x: 96
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -173,20 +173,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6ec750d26a872304b90c8194a3e6fb5a
-      internalID: 1780396781
+      spriteID: 0cf3b76260b446c4e9321c96e05e83a6
+      internalID: 699620702
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FLYING_3
+      name: Walk_3
       rect:
         serializedVersion: 2
-        x: 250
-        y: 6
-        width: 67
-        height: 60
+        x: 144
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -194,8 +194,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 888d621832d4a7242a02ac08711aa14e
-      internalID: 1921973022
+      spriteID: f4c012e195d580743a300d5ff7a41c6c
+      internalID: -1021049342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walk_4
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e6446517a8172848a6ff21e797e3970
+      internalID: -1918782802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walk_5
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0895c3f74e0bdf84785afbd33733c8ff
+      internalID: -580557436
       vertices: []
       indices: 
       edges: []
@@ -211,10 +253,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      FLYING_0: 1752469432
-      FLYING_1: 786629826
-      FLYING_2: 1780396781
-      FLYING_3: 1921973022
+      Walk_0: 1686762278
+      Walk_1: 332035305
+      Walk_2: 699620702
+      Walk_3: -1021049342
+      Walk_4: -1918782802
+      Walk_5: -580557436
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
