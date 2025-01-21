@@ -59,6 +59,8 @@ public class GameManager : MonoBehaviour
         playButton.SetActive(true); // 显示开始按钮
         backButton.SetActive(true); // 显示返回按钮
 
+        LeaderboardManager.AddScore("Game1Scores", score);
+
         Pause(); // 暂停游戏
     }
 

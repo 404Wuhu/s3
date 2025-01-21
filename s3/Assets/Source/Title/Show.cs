@@ -4,70 +4,96 @@ using UnityEngine.SceneManagement; // 引入场景管理命名空间
 
 public class Show : MonoBehaviour
 {
-    public GameObject panel; // 需要在Inspector面板中绑定的Panel对象
-    public Button showButton; // 显示Panel的按钮
-    public Button closeButton; // 关闭Panel的按钮
-    public Button switchGame1Button; // 切换场景的按钮
-    public Button switchGame2Button; // 切换场景的按钮
-    public Button switchGame3Button; // 切换场景的按钮
+    public GameObject mainPanel; // 主面板
+    public GameObject g1panel; // Game1的面板
+    public GameObject g2panel; // Game2的面板
+    public GameObject g3panel; // Game3的面板
 
-    public string targetGame1; // 目标场景的名称，在Inspector中设置
-    public string targetGame2; // 目标场景的名称，在Inspector中设置
-    public string targetGame3; // 目标场景的名称，在Inspector中设置
+    public Button showButton; // 显示主Panel的按钮
+    public Button closeButton; // 关闭主Panel的按钮
+
+    public Button game1PanelButton; // 打开Game1 Panel的按钮
+    public Button game2PanelButton; // 打开Game2 Panel的按钮
+    public Button game3PanelButton; // 打开Game3 Panel的按钮
+
+    public Button g1closeButton; // 关闭Game1 Panel的按钮
+    public Button g2closeButton; // 关闭Game2 Panel的按钮
+    public Button g3closeButton; // 关闭Game3 Panel的按钮
+
+    public Button switchGame1Button; // 切换到Game1场景的按钮
+    public Button switchGame2Button; // 切换到Game2场景的按钮
+    public Button switchGame3Button; // 切换到Game3场景的按钮
+
+    public string targetGame1; // Game1目标场景的名称
+    public string targetGame2; // Game2目标场景的名称
+    public string targetGame3; // Game3目标场景的名称
 
     void Start()
     {
-        // 显示按钮的点击事件
-        showButton.onClick.AddListener(TogglePanel);
+        // 显示主Panel按钮的点击事件
+        showButton.onClick.AddListener(ToggleMainPanel);
 
-        // 关闭按钮的点击事件
-        closeButton.onClick.AddListener(ClosePanel);
+        // 关闭主Panel按钮的点击事件
+        closeButton.onClick.AddListener(CloseMainPanel);
+
+        // 打开各自Panel按钮的点击事件
+        game1PanelButton.onClick.AddListener(() => ToggleSpecificPanel(g1panel));
+        game2PanelButton.onClick.AddListener(() => ToggleSpecificPanel(g2panel));
+        game3PanelButton.onClick.AddListener(() => ToggleSpecificPanel(g3panel));
+
+        // 关闭各自Panel按钮的点击事件
+        g1closeButton.onClick.AddListener(() => CloseSpecificPanel(g1panel));
+        g2closeButton.onClick.AddListener(() => CloseSpecificPanel(g2panel));
+        g3closeButton.onClick.AddListener(() => CloseSpecificPanel(g3panel));
 
         // 切换场景按钮的点击事件
-        switchGame1Button.onClick.AddListener(SwitchGame1);
+        switchGame1Button.onClick.AddListener(() => SceneManager.LoadScene(targetGame1));
+        switchGame2Button.onClick.AddListener(() => SceneManager.LoadScene(targetGame2));
+        switchGame3Button.onClick.AddListener(() => SceneManager.LoadScene(targetGame3));
 
-        // 切换场景按钮的点击事件
-        switchGame2Button.onClick.AddListener(SwitchGame2);
-
-        // 切换场景按钮的点击事件
-        switchGame3Button.onClick.AddListener(SwitchGame3);
-
-        // 默认隐藏关闭按钮，只有Panel显示时才显示
+        // 默认隐藏关闭按钮和所有子Panel
         closeButton.gameObject.SetActive(false);
+        g1panel.SetActive(false);
+        g2panel.SetActive(false);
+        g3panel.SetActive(false);
     }
 
-    void TogglePanel()
+    void ToggleMainPanel()
     {
-        // 切换Panel的激活状态
-        bool isActive = !panel.activeSelf;
-        panel.SetActive(isActive);
+        // 切换主Panel的显示状态
+        bool isActive = !mainPanel.activeSelf;
+        mainPanel.SetActive(isActive);
 
         // 控制关闭按钮的显示状态
         closeButton.gameObject.SetActive(isActive);
     }
 
-    void ClosePanel()
+    void CloseMainPanel()
     {
-        // 隐藏Panel和关闭按钮
-        panel.SetActive(false);
+        // 隐藏主Panel和关闭按钮
+        mainPanel.SetActive(false);
         closeButton.gameObject.SetActive(false);
+
+        // 同时隐藏所有子Panel
+        g1panel.SetActive(false);
+        g2panel.SetActive(false);
+        g3panel.SetActive(false);
     }
 
-    void SwitchGame1()
+    void ToggleSpecificPanel(GameObject panel)
     {
-        // 切换到目标场景
-        SceneManager.LoadScene(targetGame1);
+        // 显示指定的Panel，同时隐藏其他Panel
+        g1panel.SetActive(false);
+        g2panel.SetActive(false);
+        g3panel.SetActive(false);
+
+        // 切换指定Panel的显示状态
+        panel.SetActive(true);
     }
 
-    void SwitchGame2()
+    void CloseSpecificPanel(GameObject panel)
     {
-        // 切换到目标场景
-        SceneManager.LoadScene(targetGame2);
-    }
-
-    void SwitchGame3()
-    {
-        // 切换到目标场景
-        SceneManager.LoadScene(targetGame3);
+        // 关闭指定的Panel
+        panel.SetActive(false);
     }
 }
