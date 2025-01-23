@@ -27,6 +27,8 @@ public class G3Manager : MonoBehaviour
 
     public G3Player player; // 玩家对象，控制玩家行为
 
+    public InputField nameInputField; // 玩家名字输入框
+
     private Vector3 playerInitialPosition; // 玩家初始位置
 
     private void Awake()
@@ -38,6 +40,9 @@ public class G3Manager : MonoBehaviour
         Pause(); // 初始化时暂停游戏
 
         gameOver.SetActive(false); // 隐藏游戏结束UI
+
+        string playerName = PlayerPrefs.GetString("PlayerName", "未知玩家");
+        Debug.Log("当前玩家名字: " + playerName);
     }
 
     /// <summary>
@@ -45,6 +50,12 @@ public class G3Manager : MonoBehaviour
     /// </summary>
     public void Play()
     {
+        // 保存玩家名字
+        SavePlayerName();
+
+        // 隐藏名字输入框
+        nameInputField.gameObject.SetActive(false);
+
         score = 0; // 重置分数
         scoreText.text = score.ToString(); // 更新分数显示
 
@@ -63,6 +74,18 @@ public class G3Manager : MonoBehaviour
         player.enabled = true; // 启用玩家控制
 
         StartSpawning(); // 开始生成物体
+    }
+
+    public void SavePlayerName()
+    {
+        string playerName = nameInputField.text;
+        if (string.IsNullOrEmpty(playerName))
+        {
+            playerName = "未知玩家"; // 如果名字为空，使用默认名字
+        }
+
+        PlayerPrefs.SetString("PlayerName", playerName);
+        PlayerPrefs.Save();
     }
 
     /// <summary>
@@ -151,7 +174,15 @@ public class G3Manager : MonoBehaviour
         playButton.SetActive(true); // 显示开始按钮
         backButton.SetActive(true); // 显示返回按钮
 
-        LeaderboardManager.AddScore("Game3Scores", score);
+
+        // 显示名字输入框
+        nameInputField.gameObject.SetActive(true);
+
+        // 假设玩家名字存储在一个输入框中
+        string playerName = PlayerPrefs.GetString("PlayerName", "未知玩家");
+
+        // 保存分数和名字到排行榜
+        LeaderboardManager.AddScore("Game3Scores", playerName, score);
 
         Pause(); // 暂停游戏
     }

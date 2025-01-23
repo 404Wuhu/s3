@@ -42,14 +42,14 @@ public class TitleSceneManager : MonoBehaviour
     /// </summary>
     private void ShowLeaderboard(string gameKey, GameObject panel, Text leaderboardText)
     {
-        // 获取排行榜分数
-        List<int> scores = LeaderboardManager.GetScores(gameKey);
+        // 获取排行榜条目
+        List<LeaderboardManager.LeaderboardEntry> entries = LeaderboardManager.GetLeaderboard(gameKey);
 
         // 构建显示内容
         string leaderboardContent = "排行榜:\n";
-        for (int i = 0; i < scores.Count; i++)
+        for (int i = 0; i < entries.Count; i++)
         {
-            leaderboardContent += $"{i + 1}. 分数: {scores[i]}\n";
+            leaderboardContent += $"{i + 1}. {entries[i].playerName} - {entries[i].score}\n";
         }
 
         // 更新 Text 内容
@@ -58,4 +58,5 @@ public class TitleSceneManager : MonoBehaviour
         // 显示对应的 Panel
         panel.SetActive(true);
     }
+
 }

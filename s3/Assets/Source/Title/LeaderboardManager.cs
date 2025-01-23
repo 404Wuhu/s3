@@ -1,62 +1,50 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class LeaderboardManager : MonoBehaviour
+public static class LeaderboardManager
 {
-    private const int MaxEntries = 10; // 每个排行榜最多存储10个分数
-
-    /// <summary>
-    /// 添加分数到指定排行榜
-    /// </summary>
-    public static void AddScore(string gameKey, int score)
+    [System.Serializable]
+    public class LeaderboardEntry
     {
-        List<int> scores = GetScores(gameKey);
+        public string playerName; // 玩家名字
+        public int score;         // 玩家分数
 
-        // 添加分数并排序
-        scores.Add(score);
-        scores.Sort((a, b) => b.CompareTo(a)); // 从高到低排序
-
-        // 保留前10个分数
-        if (scores.Count > MaxEntries)
+        public LeaderboardEntry(string name, int score)
         {
-            scores.RemoveAt(scores.Count - 1);
+            playerName = name;
+            this.score = score;
         }
-
-        // 保存分数
-        SaveScores(gameKey, scores);
     }
 
-    /// <summary>
-    /// 获取指定排行榜的分数
-    /// </summary>
-    public static List<int> GetScores(string gameKey)
+    private static Dictionary<string, List<LeaderboardEntry>> leaderboards = new Dictionary<string, List<LeaderboardEntry>>();
+
+    public static void AddScore(string gameKey, string playerName, int score)
     {
-        List<int> scores = new List<int>();
-        for (int i = 0; i < MaxEntries; i++)
+        if (!leaderboards.ContainsKey(gameKey))
         {
-            if (PlayerPrefs.HasKey($"{gameKey}_Score_{i}"))
-            {
-                scores.Add(PlayerPrefs.GetInt($"{gameKey}_Score_{i}"));
-            }
+            leaderboards[gameKey] = new List<LeaderboardEntry>();
         }
-        return scores;
+
+        // 添加新的条目
+        leaderboards[gameKey].Add(new LeaderboardEntry(playerName, score));
+
+        // 按分数从高到低排序
+        leaderboards[gameKey].Sort((a, b) => b.score.CompareTo(a.score));
+
+        // 只保留前10名
+        if (leaderboards[gameKey].Count > 10)
+        {
+            leaderboards[gameKey].RemoveAt(leaderboards[gameKey].Count - 1);
+        }
     }
 
-    /// <summary>
-    /// 保存排行榜数据
-    /// </summary>
-    private static void SaveScores(string gameKey, List<int> scores)
+    public static List<LeaderboardEntry> GetLeaderboard(string gameKey)
     {
-        for (int i = 0; i < scores.Count; i++)
+        if (!leaderboards.ContainsKey(gameKey))
         {
-            PlayerPrefs.SetInt($"{gameKey}_Score_{i}", scores[i]);
+            leaderboards[gameKey] = new List<LeaderboardEntry>();
         }
 
-        for (int i = scores.Count; i < MaxEntries; i++)
-        {
-            PlayerPrefs.DeleteKey($"{gameKey}_Score_{i}");
-        }
-
-        PlayerPrefs.Save();
+        return leaderboards[gameKey];
     }
 }
