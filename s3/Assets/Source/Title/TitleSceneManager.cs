@@ -46,7 +46,7 @@ public class TitleSceneManager : MonoBehaviour
         List<LeaderboardManager.LeaderboardEntry> entries = LeaderboardManager.GetLeaderboard(gameKey);
 
         // 构建显示内容
-        string leaderboardContent = "排行榜:\n";
+        string leaderboardContent = "ランキング:\n";
         for (int i = 0; i < entries.Count; i++)
         {
             leaderboardContent += $"{i + 1}. {entries[i].playerName} - {entries[i].score}\n";

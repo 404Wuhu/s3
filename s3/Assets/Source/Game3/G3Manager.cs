@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement; // 导入场景管理命名空间
@@ -22,14 +21,19 @@ public class G3Manager : MonoBehaviour
 
     public GameObject playButton; // 开始游戏按钮
     public GameObject backButton; // 返回主菜单按钮
-
     public GameObject gameOver; // 游戏结束的UI对象
+
+    public GameObject pauseMenu; // 暂停菜单对象
+    public Button resumeButton; // 暂停菜单中的继续按钮
+    public Button restartButton; // 暂停菜单中的重新开始按钮
+    public Button quitButton; // 暂停菜单中的返回主菜单按钮
 
     public G3Player player; // 玩家对象，控制玩家行为
 
     public InputField nameInputField; // 玩家名字输入框
 
     private Vector3 playerInitialPosition; // 玩家初始位置
+    private bool isPaused = false; // 游戏是否处于暂停状态
 
     private void Awake()
     {
@@ -38,11 +42,32 @@ public class G3Manager : MonoBehaviour
         playerInitialPosition = player.transform.position; // 保存玩家的初始位置
 
         Pause(); // 初始化时暂停游戏
-
         gameOver.SetActive(false); // 隐藏游戏结束UI
+        pauseMenu.SetActive(false); // 隐藏暂停菜单
 
-        string playerName = PlayerPrefs.GetString("PlayerName", "未知玩家");
+        string playerName = PlayerPrefs.GetString("PlayerName", "知らない人");
         Debug.Log("当前玩家名字: " + playerName);
+
+        // 为暂停菜单的按钮绑定功能
+        resumeButton.onClick.AddListener(ResumeGame);
+        restartButton.onClick.AddListener(RestartGame);
+        quitButton.onClick.AddListener(BackToTitle);
+    }
+
+    private void Update()
+    {
+        // 检测 ESC 键，控制暂停和恢复
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isPaused)
+            {
+                ResumeGame();
+            }
+            else
+            {
+                ShowPauseMenu();
+            }
+        }
     }
 
     /// <summary>
@@ -81,16 +106,13 @@ public class G3Manager : MonoBehaviour
         string playerName = nameInputField.text;
         if (string.IsNullOrEmpty(playerName))
         {
-            playerName = "未知玩家"; // 如果名字为空，使用默认名字
+            playerName = "知らない人"; // 如果名字为空，使用默认名字
         }
 
         PlayerPrefs.SetString("PlayerName", playerName);
         PlayerPrefs.Save();
     }
 
-    /// <summary>
-    /// 销毁所有带有指定标签的物体
-    /// </summary>
     private void DestroyAllObjectsWithTag(string tag)
     {
         GameObject[] objects = GameObject.FindGameObjectsWithTag(tag); // 查找所有带有指定标签的物体
@@ -100,17 +122,11 @@ public class G3Manager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 开始生成物体（Poison 和 Food）。
-    /// </summary>
     private void StartSpawning()
     {
         StartCoroutine(SpawnRoutine());
     }
 
-    /// <summary>
-    /// 生成物体的协程，生成间隔逐渐减少
-    /// </summary>
     private IEnumerator SpawnRoutine()
     {
         while (true)
@@ -125,9 +141,6 @@ public class G3Manager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 随机生成 Poison 或 Food 并设置生成位置。
-    /// </summary>
     private void SpawnObject()
     {
         // 随机选择生成的物体类型
@@ -147,39 +160,49 @@ public class G3Manager : MonoBehaviour
         Instantiate(objectToSpawn, spawnPos, Quaternion.identity);
     }
 
-    /// <summary>
-    /// 增加分数。
-    /// </summary>
     public void IncreaseScore()
     {
         score++; // 增加分数
         scoreText.text = score.ToString(); // 更新分数显示
     }
 
-    /// <summary>
-    /// 暂停游戏。
-    /// </summary>
     public void Pause()
     {
         Time.timeScale = 0f; // 暂停游戏时间
         player.enabled = false; // 禁用玩家控制
     }
 
-    /// <summary>
-    /// 游戏结束的逻辑。
-    /// </summary>
+    public void ResumeGame()
+    {
+        isPaused = false; // 更新暂停状态
+        Time.timeScale = 1f; // 恢复游戏时间
+        pauseMenu.SetActive(false); // 隐藏暂停菜单
+    }
+
+    public void ShowPauseMenu()
+    {
+        isPaused = true; // 更新暂停状态
+        Time.timeScale = 0f; // 暂停游戏时间
+        pauseMenu.SetActive(true); // 显示暂停菜单
+    }
+
+    public void RestartGame()
+    {
+        ResumeGame(); // 确保恢复游戏时间
+        Play(); // 重新开始游戏
+    }
+
     public void GameOver()
     {
         gameOver.SetActive(true); // 显示游戏结束UI
         playButton.SetActive(true); // 显示开始按钮
         backButton.SetActive(true); // 显示返回按钮
 
-
         // 显示名字输入框
         nameInputField.gameObject.SetActive(true);
 
         // 假设玩家名字存储在一个输入框中
-        string playerName = PlayerPrefs.GetString("PlayerName", "未知玩家");
+        string playerName = PlayerPrefs.GetString("PlayerName", "知らない人");
 
         // 保存分数和名字到排行榜
         LeaderboardManager.AddScore("Game3Scores", playerName, score);
@@ -187,11 +210,9 @@ public class G3Manager : MonoBehaviour
         Pause(); // 暂停游戏
     }
 
-    /// <summary>
-    /// 返回主菜单。
-    /// </summary>
     public void BackToTitle()
     {
+        Time.timeScale = 1f; // 恢复时间
         SceneManager.LoadScene("Title"); // 加载主菜单场景
     }
 }
